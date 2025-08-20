@@ -1,6 +1,27 @@
 
-// Commands
+// Directory Structure
 
+const root = '~';
+let cwd = root;
+
+const user = 'guest';
+const server = 'linda-shell';
+
+function prompt() {
+    return `<mediumorchid>${user}@${server}</mediumorchid>:<white>${cwd}</white>$ `;
+}
+
+const dirs = {
+    documents: ['file1.txt', 'file2.txt'],
+    downloads: ['file3.txt', 'file4.txt'],
+    pictures: ['image1.png', 'image2.png']
+};
+
+function print_home() {
+    term.echo(Object.keys(dirs).map(dir => `<white>${dir}</white>`).join('\n'));
+}
+
+// Commands
 const commands = {
     help() {
         term.echo(`List of available commands: ${help}`);
@@ -14,6 +35,66 @@ const commands = {
     about() {
         term.echo('This is my terminal website, built out of sheer curiosity. It\'s a little corner of the internet I thought I might share with you. \n\nListen, I like building this stuff as much as the next person, but I also enjoy a good laugh. So, if you see anything funny, feel free to point it out!');
     },
+    cd(dir = null) {
+        if (dir == null || (dir == '..' && cwd !== root)) {
+            cwd = root;
+        } else if (dir.startsWith('~/') && Object.keys(dirs).includes(dir.substring(2))) {
+            cwd = dir;
+        } else if (dir.startsWith('../') && cwd !== root && Object.keys(dirs).includes(dir.substring(3))) {
+            cwd = root + '/' + dir.substring(3);
+        } else if (Object.keys(dirs).includes(dir)) {
+            cwd = root + '/' + dir;
+        } else {
+            term.echo(`No such directory: ${dir}`);
+        }
+    },
+    ls(dir=null) {
+        //if an arg is provided
+        if (dir) {
+            if (dir.match(/^~\/?$/)) {
+                // ls ~ or ls ~/
+                print_home()
+            } else if (dir.startsWith('~/')) {
+                // ls ~/subdir
+                const path = dir.substring(2);
+                const subdirs = path.split('/');
+                if (subdirs.length > 1) {
+                    // ls ~/subdir1/subdir2
+                    this.error(`Invalid directory: Nested subdirectories are not supported.`);
+                } else {
+                    // ls ~/subdir1
+                    const dir = subdirs[0];
+                    // check if it exists
+                    if (dirs[dir]) {
+                        this.echo(dirs[dir].join('\n'));
+                    } else {
+                        this.error(`Invalid directory: ~/${dir}`);
+                    }
+                }
+            } else if (cwd === root) {
+                if (dir in dirs) {
+                    // ls <dir> exists (from root)
+                    this.echo(dirs[dir].join('\n'));
+                } else {
+                    // ls <dir> does not exist (from root)
+                    this.error(`Invalid directory: ${dir}`);
+                }
+            } else if (dir === '..') {
+                // ls ..
+                print_home();
+            } else {
+                // ls <dir>/<subdir> does not exist
+                this.error(`Invalid directory: ${dir}`);
+            }
+        } else if (cwd === root) {
+            // ls
+            print_home();
+        } else {
+            // ls <subdir> (from non-root))
+            const dir = cwd.substring(2);
+            this.echo(dirs[dir].join('\n')); //FIXME: doesn't work?
+        }
+    }
 };
 
 
@@ -27,7 +108,7 @@ const formatted_list = command_list.map(cmd => `<white class="command">${cmd}</w
 const help = formatter.format(formatted_list);
 
 const any_command_re = new RegExp(`^\s*(${command_list.join('|')})`);
-$.terminal.new_formatter([any_command_re, '<blue>$1</aqua>']);
+$.terminal.new_formatter([any_command_re, '<mediumvioletred>$1</mediumvioletred>']);
 
 // Header Logo Styling
 
@@ -37,10 +118,13 @@ figlet.defaults({ fontPath: 'https://cdn.jsdelivr.net/gh/patorjk/figlet.js/fonts
 figlet.preloadFonts([font], ready);
 
 
+
 const term = $('body').terminal(commands, {
     greetings: false,
     checkArity: false,
-    exit: false
+    exit: false,
+    completion: true,
+    prompt
 });
 
 function ready() {
