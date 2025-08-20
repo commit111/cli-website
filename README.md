@@ -16,5 +16,5 @@ A CLI terminal-style website.
 
 ### Libraries:
 - JQuery Terminal: https://terminal.jcubic.pl
-- Figlet.js: https://github.com/patorjk/figlet.js/
+- Figlet.js: https://github.com/patorjk/figlet.js
 - Isomorphic Lolcat: https://github.com/jcubic/isomorphic-lolcat
