@@ -94,6 +94,19 @@ const commands = {
             const dir = cwd.substring(2);
             this.echo(dirs[dir].join('\n')); //FIXME: doesn't work?
         }
+    },
+    async joke() {
+        const res = await fetch('https://v2.jokeapi.dev/joke/Programming');
+        const data = await res.json();
+        
+        if (data.type == 'twopart') {
+            this.animation( async () => {
+                await this.echo(`Q: ${data.setup}`, {delay: 50, typing: true});
+                await this.echo(`A: ${data.delivery}`, {delay: 50, typing: true});
+            });
+        } else if (data.type == 'single') {
+            this.echo(data.joke, {delay: 50, typing: true});
+        }
     }
 };
 
