@@ -107,9 +107,61 @@ const commands = {
         } else if (data.type == 'single') {
             this.echo(data.joke, {delay: 50, typing: true});
         }
+    },
+    credits() {
+        return [
+            '',
+            '<white>Libraries:</white>',
+            '<white>',
+            '* <a href="https://terminal.jcubic.pl">jQuery Terminal</a>',
+            '* <a href="https://github.com/patorjk/figlet.js/">Figlet.js</a>',
+            '* <a href="https://github.com/jcubic/isomorphic-lolcat">Isomorphic Lolcat</a>',
+            '* <a href="https://jokeapi.dev/">Joke API</a>',
+            '</white>',
+            ''
+        ].join('\n');
+    },
+    matrix() {
+        let running = true;
+        const cols = term.cols();
+        const rows = term.rows();
+        const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        function randomChar() {
+            return chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        function draw() {
+            if (!running) return;
+            let output = '';
+            for (let i = 0; i < rows; ++i) {
+                let line = '';
+                for (let j = 0; j < cols; ++j) {
+                    line += `<mediumvioletred>${Math.random() > 0.9 ? randomChar() : ' '}</mediumvioletred>`;
+                }
+                output += line + '\n';
+            }
+            term.clear();
+            term.echo(output);
+            setTimeout(draw, 100);
+        }
+        draw();
+        setTimeout(() => { running = false; term.clear(); }, 2000);
+    },
+    cowsay(...args) {
+        const msg = args.join(' ') || "Moo!";
+        const border = '-'.repeat(msg.length + 2);
+        const cow = [
+            ` ${border} `,
+            `<mediumvioletred>< ${msg} ></mediumvioletred>`,
+            ` ${border} `,
+            "        \\   ^__^",
+            "         \\  (oo)\\_______",
+            "            (__)\\       )\\/\\",
+            "                ||----w |",
+            "                ||     ||"
+        ].join('\n');
+        this.echo(`<white>${cow}</white>`);
     }
 };
-
 
 const formatter = new Intl.ListFormat('en', {
   style: 'long',
