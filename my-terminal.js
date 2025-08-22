@@ -123,7 +123,23 @@ const term = $('body').terminal(commands, {
     greetings: false,
     checkArity: false,
     exit: false,
-    completion: true,
+    completion(string){
+        //show completion suggestions for cd and ls into directories
+        const cmd = this.get_command();
+        const {name, rest} = $.terminal.parse_command(cmd);
+        if (['cd', 'ls'].includes(name)) {
+            if (rest.startsWith('~/')) {
+                return Object.keys(dirs).map(dir => `~/${dir}`);
+            }
+            if (rest.startsWith('../')) {
+                return Object.keys(dirs).map(dir => `../${dir}`);
+            }
+            if (cmd == root) {
+                return dirs;
+            }
+        }
+        return Object.keys(commands);
+    },
     prompt
 });
 
