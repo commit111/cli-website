@@ -18,3 +18,4 @@ A CLI terminal-style website.
 - JQuery Terminal: https://terminal.jcubic.pl
 - Figlet.js: https://github.com/patorjk/figlet.js
 - Isomorphic Lolcat: https://github.com/jcubic/isomorphic-lolcat
+- Joke API: https://jokeapi.dev/
