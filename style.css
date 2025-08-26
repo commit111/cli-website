@@ -5,3 +5,28 @@
 /* .command {
     cursor: pointer;
 } */
+
+.glow {
+    color: inherit;
+    /* The glow will always match the text color because of currentColor */
+    text-shadow:
+        0 0 10px currentColor,
+        0 0 15px currentColor,
+        0 0 30px currentColor;
+    animation: glowPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+    from {
+        text-shadow:
+            0 0 10px currentColor,
+            0 0 15px currentColor,
+            0 0 30px currentColor;
+    }
+    to {
+        text-shadow:
+            0 0 20px currentColor,
+            0 0 30px currentColor,
+            0 0 40px currentColor;
+    }
+}

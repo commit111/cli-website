@@ -159,7 +159,9 @@ const commands = {
             "                ||----w |",
             "                ||     ||"
         ].join('\n');
-        this.echo(`<white>${cow}</white>`);
+        // Apply glow to each line of the cow
+        const glowing_cow = cow.split('\n').map(glow).join('\n');
+        this.echo(`<white>${glowing_cow}</white>`);
     }
 };
 
@@ -206,12 +208,31 @@ const term = $('body').terminal(commands, {
         return Object.keys(commands);
     },
     prompt
-});
+})
 
+function glow(text) {
+    // Wrap each character in a span with neon effect
+    return `<span class="glow">${text}</span>`;
+}
+
+// Apply neon to the title in ready()
 function ready() {
     const seed = 222;
     term.echo(() => {
         const ascii = rainbow(render('Linda L.'), seed);
+        // Apply neon to each line of the ascii art
+        const neon_ascii = ascii
+            .split('\n')
+            .map(line => neon(line))
+            .join('\n');
+        return `${neon_ascii}\n[[;#fff;]Welcome to my Terminal Portfolio...]\n`;
+    });
+}
+
+function ready() {
+    const seed = 222;
+    term.echo(() => {
+        const ascii = glow(rainbow(render('Linda L.'), seed));
         return `${ascii}\n[[;#fff;]Welcome to my Terminal Portfolio...]\n`;
     });
 }
