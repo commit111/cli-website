@@ -257,20 +257,6 @@ function glow(text) {
     return `<span class="glow">${text}</span>`;
 }
 
-// Apply neon to the title in ready()
-function ready() {
-    const seed = 222;
-    term.echo(() => {
-        const ascii = rainbow(render('Linda L.'), seed);
-        // Apply neon to each line of the ascii art
-        const neon_ascii = ascii
-            .split('\n')
-            .map(line => neon(line))
-            .join('\n');
-        return `${neon_ascii}\n[[;#fff;]Welcome to my Terminal Portfolio...]\n`;
-    });
-}
-
 function ready() {
     const seed = 222;
     term.echo(() => {
