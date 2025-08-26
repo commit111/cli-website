@@ -135,7 +135,7 @@ const commands = {
             for (let i = 0; i < rows; ++i) {
                 let line = '';
                 for (let j = 0; j < cols; ++j) {
-                    line += `<mediumvioletred>${Math.random() > 0.9 ? randomChar() : ' '}</mediumvioletred>`;
+                    line += `<mediumvioletred class="glow-small">${Math.random() > 0.9 ? randomChar() : ' '}</mediumvioletred>`;
                 }
                 output += line + '\n';
             }
