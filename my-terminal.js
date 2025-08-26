@@ -33,7 +33,7 @@ const commands = {
         term.echo(args.join(' '));
     },
     about() {
-        term.echo('This is my terminal website, built out of sheer curiosity. It\'s a little corner of the internet I thought I might share with you. \n\nListen, I like building this stuff as much as the next person, but I also enjoy a good laugh. So, if you see anything funny, feel free to point it out!');
+        term.echo('This is my terminal website, built out of sheer curiosity. It\'s a little corner of the internet I thought I might share with you. \n\nListen, I like building this stuff as much as the next person, but there comes a time and a place where you just gotta relax and not think too hard about what comes next.', {delay: 50, typing: true});
     },
     cd(dir = null) {
         if (dir == null || (dir == '..' && cwd !== root)) {
@@ -171,8 +171,50 @@ const formatter = new Intl.ListFormat('en', {
 });
 
 const command_list = Object.keys(commands);
-const formatted_list = command_list.map(cmd => `<white class="command">${cmd}</white>`);
-const help = formatter.format(formatted_list);
+command_list.forEach(cmd => {
+    switch (cmd) {
+        case 'help':
+            commands[cmd].description = 'Show this help message';
+            break;
+        case 'clear':
+            commands[cmd].description = 'Clear the terminal screen';
+            break;
+        case 'echo':
+            commands[cmd].description = 'Print arguments to the terminal';
+            break;
+        case 'about':
+            commands[cmd].description = 'Show information about this site';
+            break;
+        case 'cd':
+            commands[cmd].description = 'Change directory';
+            break;
+        case 'ls':
+            commands[cmd].description = 'List files in a directory';
+            break;
+        case 'joke':
+            commands[cmd].description = 'Tell a programming joke';
+            break;
+        case 'credits':
+            commands[cmd].description = 'Show credits and libraries used';
+            break;
+        case 'matrix':
+            commands[cmd].description = 'Matrix rain animation';
+            break;
+        case 'cowsay':
+            commands[cmd].description = 'Display a message with a cow';
+            break;
+        default:
+            commands[cmd].description = '';
+    }
+});
+
+// Calculate max command length for alignment
+const maxCmdLength = Math.max(...command_list.map(cmd => cmd.length));
+const formatted_list = command_list.map(cmd => {
+    const pad = ' '.repeat(maxCmdLength - cmd.length + 2); // 2 spaces after command
+    return `<white class="command">\t${cmd}${pad}<gray>${commands[cmd].description}</gray></white>`;
+}).join('\n');
+const help = '\n' + formatted_list;
 
 const any_command_re = new RegExp(`^\s*(${command_list.join('|')})`);
 $.terminal.new_formatter([any_command_re, '<mediumvioletred>$1</mediumvioletred>']);
