@@ -16,6 +16,27 @@
     animation: glowPulse 1s ease-in-out infinite alternate;
 }
 
+.glow-small {
+    color: inherit;
+    text-shadow:
+        0 0 3px currentColor,
+        0 0 5px currentColor;
+    animation: glowSmallPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes glowSmallPulse {
+    from {
+        text-shadow:
+            0 0 3px currentColor,
+            0 0 5px currentColor;
+    }
+    to {
+        text-shadow:
+            0 0 3px currentColor,
+            0 0 5px currentColor;
+    }
+}
+
 @keyframes glowPulse {
     from {
         text-shadow:
