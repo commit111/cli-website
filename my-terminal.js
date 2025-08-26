@@ -17,7 +17,7 @@ const dirs = {
     pictures: ['image1.png', 'image2.png']
 };
 
-function print_home() {
+function printHome() {
     term.echo(Object.keys(dirs).map(dir => `<white>${dir}</white>`).join('\n'));
 }
 
@@ -53,7 +53,7 @@ const commands = {
         if (dir) {
             if (dir.match(/^~\/?$/)) {
                 // ls ~ or ls ~/
-                print_home()
+                printHome()
             } else if (dir.startsWith('~/')) {
                 // ls ~/subdir
                 const path = dir.substring(2);
@@ -81,14 +81,14 @@ const commands = {
                 }
             } else if (dir === '..') {
                 // ls ..
-                print_home();
+                printHome();
             } else {
                 // ls <dir>/<subdir> does not exist
                 this.error(`Invalid directory: ${dir}`);
             }
         } else if (cwd === root) {
             // ls
-            print_home();
+            printHome();
         } else {
             // ls <subdir> (from non-root))
             const dir = cwd.substring(2);
@@ -160,8 +160,8 @@ const commands = {
             "                ||     ||"
         ].join('\n');
         // Apply glow to each line of the cow
-        const glowing_cow = cow.split('\n').map(glow).join('\n');
-        this.echo(`<white>${glowing_cow}</white>`);
+        const glowingCow = cow.split('\n').map(glow).join('\n');
+        this.echo(`<white>${glowingCow}</white>`);
     }
 };
 
@@ -170,8 +170,8 @@ const formatter = new Intl.ListFormat('en', {
   type: 'conjunction',
 });
 
-const command_list = Object.keys(commands);
-command_list.forEach(cmd => {
+const commandList = Object.keys(commands);
+commandList.forEach(cmd => {
     switch (cmd) {
         case 'help':
             commands[cmd].description = 'Show this help message';
@@ -209,14 +209,14 @@ command_list.forEach(cmd => {
 });
 
 // Calculate max command length for alignment
-const maxCmdLength = Math.max(...command_list.map(cmd => cmd.length));
-const formatted_list = command_list.map(cmd => {
+const maxCmdLength = Math.max(...commandList.map(cmd => cmd.length));
+const formatted_list = commandList.map(cmd => {
     const pad = ' '.repeat(maxCmdLength - cmd.length + 2); // 2 spaces after command
     return `<white class="command">\t${cmd}${pad}<gray>${commands[cmd].description}</gray></white>`;
 }).join('\n');
 const help = '\n' + formatted_list;
 
-const any_command_re = new RegExp(`^\s*(${command_list.join('|')})`);
+const any_command_re = new RegExp(`^\s*(${commandList.join('|')})`);
 $.terminal.new_formatter([any_command_re, '<mediumvioletred>$1</mediumvioletred>']);
 
 // Header Logo Styling
