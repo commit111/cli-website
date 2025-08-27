@@ -7,7 +7,23 @@
 <body>
 <div id="matrix-loading">
     <canvas id="matrix-canvas"></canvas>
-    <div class="loading-text">LOADING...</div>
+    <div class="loading-text">LOADING<br><span id="loading-hashtag">####</span></div>
+    <script>
+        // Simple animation to add more hashtags as it loads
+        function loadHashtags() {
+            var hashtag = document.getElementById('loading-hashtag');
+            var count = 4;
+            setInterval(function() {
+            count++;
+            hashtag.textContent += '#';
+            if (count > 6) { // Reset after 6 hashtags
+                hashtag.textContent = '#';
+                count = 1;
+            }
+            }, 300);
+        }
+        loadHashtags();
+    </script>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
