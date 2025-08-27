@@ -22,6 +22,7 @@ function printHome() {
 }
 
 // Commands
+
 const commands = {
     help() {
         term.echo(`List of available commands: ${help}`);
@@ -165,10 +166,7 @@ const commands = {
     }
 };
 
-const formatter = new Intl.ListFormat('en', {
-  style: 'long',
-  type: 'conjunction',
-});
+// Command Descriptions
 
 const commandList = Object.keys(commands);
 commandList.forEach(cmd => {
@@ -208,8 +206,11 @@ commandList.forEach(cmd => {
     }
 });
 
-// Calculate max command length for alignment
+
+// Format the command list for help output
+
 const maxCmdLength = Math.max(...commandList.map(cmd => cmd.length));
+
 const formatted_list = commandList.map(cmd => {
     const pad = ' '.repeat(maxCmdLength - cmd.length + 2); // 2 spaces after command
     return `<white class="command">\t${cmd}${pad}<gray>${commands[cmd].description}</gray></white>`;
@@ -227,6 +228,7 @@ figlet.defaults({ fontPath: 'https://cdn.jsdelivr.net/gh/patorjk/figlet.js/fonts
 figlet.preloadFonts([font], ready);
 
 
+// Define the terminal
 
 const term = $('body').terminal(commands, {
     greetings: false,
@@ -252,8 +254,9 @@ const term = $('body').terminal(commands, {
     prompt
 })
 
+// Helper functions
+
 function glow(text) {
-    // Wrap each character in a span with neon effect
     return `<span class="glow">${text}</span>`;
 }
 
